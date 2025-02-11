@@ -23,4 +23,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/fruit_basket.png  # Fixed: Ensure proper indentation (2 spaces)
+    - assets/fruit_basket.png

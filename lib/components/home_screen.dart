@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'product_detail_screen.dart';
+import 'basket_screen.dart';
+import 'basket_item.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userName;
@@ -10,94 +13,138 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Map<String, int> basketItems = {};
+
+  final Map<String, BasketItem> basketItems = <String, BasketItem>{};
   int _selectedIndex = 0;
 
+  void addToBasket(String name, String image, int price) {
+    setState(() {
+      if (basketItems.containsKey(name)) {
+
+        final currentItem = basketItems[name]!;
+        basketItems[name] = BasketItem(
+          name: name,
+          image: image,
+          price: price,
+          quantity: currentItem.quantity + 1,
+        );
+      } else {
+
+        basketItems[name] = BasketItem(
+          name: name,
+          image: image,
+          price: price,
+          quantity: 1,
+        );
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added $name to basket'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    });
+  }
+
   Widget _buildComboCard(String name, int price, String image) {
-    return Container(
-      margin: EdgeInsets.only(right: 16, bottom: 16),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  image,
-                  width: 150,
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Color(0xFFFFB067),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 8),
-          Text(
-            name,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
+    return InkWell(
+      onTap: () async {
+        final quantity = await Navigator.push<int>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+              name: name,
+              image: image,
+              price: price,
             ),
           ),
-          SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '₦ ${price.toString()}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFB067),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    basketItems[name] = (basketItems[name] ?? 0) + 1;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added $name to basket'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFB067),
-                    borderRadius: BorderRadius.circular(8),
+        );
+        if (quantity != null) {
+          setState(() {
+            basketItems[name] = BasketItem(
+              name: name,
+              image: image,
+              price: price,
+              quantity: quantity,
+            );
+          });
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 16, bottom: 16),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    image,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
                   ),
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
                   child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 20,
+                    Icons.favorite_border,
+                    color: Color(0xFFFFB067),
                   ),
                 ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              name,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
-            ],
-          ),
-        ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '₦ ${price.toString()}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFB067),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => addToBasket(name, image, price),
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFB067),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -106,7 +153,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: EdgeInsets.only(right: 12),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _selectedIndex = ['Hottest', 'Popular', 'New combo', 'Top']
+                .indexOf(text);
+          });
+        },
         child: Text(
           text,
           style: TextStyle(
@@ -134,7 +186,14 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               IconButton(
                 icon: Icon(Icons.shopping_basket_outlined, color: Colors.black),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BasketScreen(items: basketItems),
+                    ),
+                  );
+                },
               ),
               if (basketItems.isNotEmpty)
                 Positioned(
@@ -147,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      basketItems.values.reduce((a, b) => a + b).toString(),
+                      basketItems.values
+                          .fold(0, (sum, item) => sum + item.quantity)
+                          .toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -222,6 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildComboCard('Quinoa fruit salad', 10000, 'assets/quinoa.png'),
                 _buildComboCard('Tropical fruit salad', 10000, 'assets/tropical.png'),
+                _buildComboCard('Melon fruit salad', 10000, 'assets/melon.png'),
               ],
             ),
           ],
