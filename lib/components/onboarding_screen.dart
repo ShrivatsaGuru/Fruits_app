@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'name_input_screen.dart';
+
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
 
@@ -14,32 +15,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(20),
               child: Center(
-                child: Stack(
-                  children: [
-                Image.file(
-                File('C:/fruits_app/lib/assets/fruit_basket.png'),
-                width: double.infinity,
-                fit: BoxFit.contain,
-              ),
-                    Positioned(
-                      top: 20,
-                      right: 20,
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.yellow,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.eco,
-                          color: Colors.green,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: Image.asset('assets/fruit_basket.png', width: double.infinity, fit: BoxFit.contain),
               ),
             ),
           ),
@@ -79,6 +55,12 @@ class OnboardingScreen extends StatelessWidget {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NameInputScreen(),
+                          ),
+                        );
                       },
                       child: Text(
                         "Let's Continue",

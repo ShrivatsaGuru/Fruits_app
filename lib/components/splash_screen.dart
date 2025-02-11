@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.orange,
+                      color: Color(0xFFFFB067),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Transform.rotate(
@@ -44,7 +44,7 @@ class SplashScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
-                color: Colors.orange,
+                color: Color(0xFFFFB067),
                 fontStyle: FontStyle.italic,
               ),
             ),

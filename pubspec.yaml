@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.6.1
+  sdk: '>=3.6.1 <4.0.0'  # Fixed: SDK constraint should be a range
 
 dependencies:
   flutter:
@@ -22,6 +22,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
-    - assets/fruit_basket.png
+    - assets/fruit_basket.png  # Fixed: Ensure proper indentation (2 spaces)
