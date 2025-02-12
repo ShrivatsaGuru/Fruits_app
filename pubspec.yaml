@@ -23,4 +23,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/fruit_basket.png
+    - assets/fruit.png
+    - assets/honey_lime.png
+    - assets/berry_mango.png
+    - assets/quinoa.png
+    - assets/tropical.png
+    - assets/melon.png

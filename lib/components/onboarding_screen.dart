@@ -15,7 +15,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(20),
               child: Center(
-                child: Image.asset('assets/fruit_basket.png', width: double.infinity, fit: BoxFit.contain),
+                child: Image.asset('assets/fruit.png', width: double.infinity, fit: BoxFit.contain),
               ),
             ),
           ),
